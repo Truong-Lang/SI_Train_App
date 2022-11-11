@@ -1,0 +1,65 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: php/Dockerfile
+    image: train/php
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./php/php.ini:/etc/php.ini
+    networks:
+      - app-network-train
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: train_webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "84:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network-train
+
+  #MySQL Service
+  db:
+    image: mysql:8.0
+    container_name: train_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: train_db
+      MYSQL_ROOT_PASSWORD: root@123
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdatatrain:/var/lib/mysql-files/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network-train
+
+#Docker Networks
+networks:
+  app-network-train:
+    driver: bridge
+#Volumes
+volumes:
+  dbdatatrain:
+    driver: local
