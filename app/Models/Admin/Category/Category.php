@@ -3,7 +3,6 @@
 namespace App\Models\Admin\Category;
 
 use App\Common\Constant;
-use App\Models\Admin\News\News;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -120,16 +119,12 @@ class Category extends Model
      */
     public function deleteCategory($params)
     : int {
-        return DB::table($this->table)
-            ->where('id', $params['id'])
-            ->update([
-                'deleted_at' => now(),
-                'deleted_by' => $params['userId'],
-            ]);
-    }
+       return DB::table($this->table)
+                ->where('id', $params['id'])
+                ->update([
+                    'deleted_at' => now(),
+                    'deleted_by' => $params['userId'],
+                ]);
 
-    public function news()
-    {
-        return $this->hasOne(News::class);
     }
 }
