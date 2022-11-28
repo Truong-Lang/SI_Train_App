@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Models\Admin\Category;
+namespace App\Models\Admin\News;
 
 use App\Common\Constant;
-use App\Models\Admin\News\News;
+use App\Models\Admin\Category\Category;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Exception;
 
-class Category extends Model
+class News extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'categories';
+    protected $table = 'news';
 
     /**
      * The primary key associated with the table.
@@ -30,12 +30,21 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'parent',
-        'status',
-        'updated_at',
+        'title',
+        'description',
+        'content',
+        'menu_id',
+        'category_id',
         'del_flg',
     ];
+
+    /**
+     * Get the Category of News.
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     /**
      * @param $where
@@ -45,7 +54,7 @@ class Category extends Model
      */
     public function getAll($where = null, $orderBy = null)
     : array {
-        $sql = DB::table($this->table . ' as c');
+        $sql = DB::table($this->table . ' as n');
         if ($where) {
             $sql->where($where);
         }
@@ -53,19 +62,19 @@ class Category extends Model
             $sql->orderByRaw($orderBy);
         }
         $sql->join('users as u', function ($join) {
-            $join->on('u.id', '=', 'c.updated_by')
+            $join->on('u.id', '=', 'n.updated_by')
                 ->whereNull('u.deleted_at');
         });
         return $sql->select(
-            'c.*',
+            'n.*',
             DB::raw("CONCAT(u.last_name,' ',u.first_name) AS full_name"),
-            Db::raw(
-                'DATE_FORMAT(c.created_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as created_at'
+            DB::raw(
+                'DATE_FORMAT(n.created_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as created_at'
             ),
-            Db::raw(
-                'DATE_FORMAT(c.updated_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as updated_at'
+            DB::raw(
+                'DATE_FORMAT(n.updated_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as updated_at'
             ))
-            ->whereNull('c.deleted_at')
+            ->whereNull('n.deleted_at')
             ->get()->toArray();
     }
 
@@ -92,13 +101,16 @@ class Category extends Model
     : int {
         $dateTime = now();
         $arrData = [
-            'name'       => $params['name'],
-            'parent'     => !empty($params['parent']) ? $params['parent'] : Constant::NUMBER_ZERO,
-            'status'     => !empty($params['status']) ? $params['status'] : Constant::NUMBER_ZERO,
-            'active'     => !empty($params['active']) ? $params['active'] : Constant::NUMBER_ZERO,
-            'del_flg'    => Constant::NUMBER_ZERO,
-            'updated_at' => $dateTime,
-            'updated_by' => $params['userId']
+            'title'       => $params['title'],
+            'description' => $params['description'],
+            'content'     => $params['content'],
+            'category_id' => $params['category_id'],
+            'menu_id'     => $params['menu_id'],
+            'status'      => !empty($params['status']) ? $params['status'] : Constant::NUMBER_ZERO,
+            'active'      => !empty($params['active']) ? $params['active'] : Constant::NUMBER_ZERO,
+            'del_flg'     => Constant::NUMBER_ZERO,
+            'updated_at'  => $dateTime,
+            'updated_by'  => $params['userId']
         ];
         if (empty($params['id'])) {
             $arrData['created_at'] = $dateTime;
@@ -113,23 +125,7 @@ class Category extends Model
         return $insertOrUpdate;
     }
 
-    /**
-     * @param $params
-     *
-     * @return int
-     */
-    public function deleteCategory($params)
-    : int {
-        return DB::table($this->table)
-            ->where('id', $params['id'])
-            ->update([
-                'deleted_at' => now(),
-                'deleted_by' => $params['userId'],
-            ]);
-    }
-
-    public function news()
+    public function getCategory()
     {
-        return $this->hasOne(News::class);
     }
 }

@@ -61,4 +61,15 @@ Route::group(['prefix' => Constant::FOLDER_URL_ADMIN_ROUTE], function () {
         Route::put('/password',
             ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
     });
+
+    // Category Routes...
+    Route::group(['prefix' => 'news'], function () {
+        Route::get('/', Constant::FOLDER_URL_ADMIN . '\News\NewsController@index')
+            ->name(Constant::FOLDER_URL_ADMIN.'.news.index');
+        Route::get('/create-edit/{id?}', Constant::FOLDER_URL_ADMIN . '\News\NewsController@createAndEdit')
+            ->name(Constant::FOLDER_URL_ADMIN.'.news.createAndEdit');
+        Route::post('/store', Constant::FOLDER_URL_ADMIN . '\News\NewsController@store')
+            ->name(Constant::FOLDER_URL_ADMIN.'.news.store');
+        Route::post('/', Constant::FOLDER_URL_ADMIN . '\News\NewsController@delete');
+    });
 });
