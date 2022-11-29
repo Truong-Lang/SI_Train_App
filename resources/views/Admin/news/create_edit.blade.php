@@ -17,7 +17,7 @@
                         <div class="card-body ">
                             <form method="post"
                                   action="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.store') }}"
-                                  class="form-horizontal">
+                                  class="form-horizontal" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <label class="col-sm-2 col-form-label">Title <span class="text-danger">*</span></label>
@@ -50,13 +50,24 @@
                                     <label class="col-sm-2 col-form-label">Content <span class="text-danger">*</span></label>
                                     <div class="col-sm-10">
                                         <div class="form-group {{ $errors->has('content') ? 'has-danger' : '' }} bmd-form-group">
-                                            <textarea class="form-control" id="input-content-area"
+                                            <textarea class="form-control" id="input-tinymce-area"
                                                       name="content">{{ old('content') ?? $getNews->content ?? '' }}</textarea>
                                             @if ($errors->has('content'))
                                                 <span id="content-error" class="error text-danger"
                                                       for="input-content-area">{{ $errors->first('content') }}</span>
                                             @endif
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row image">
+                                    <label class="col-sm-2 col-form-label">Image <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="file" class="form-control" id="image" name="image"
+                                               accept="image/png, image/jpeg">
+                                        @if ($errors->has('image'))
+                                            <span id="image-error" class="error text-danger"
+                                                  for="input-image">{{ $errors->first('image') }}</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row">
@@ -77,20 +88,6 @@
                                                 <span id="category-id-error" class="error text-danger"
                                                       for="select-category">{{ $errors->first('category_id') }}</span>
                                             @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <label class="col-sm-2 col-form-label">Menu</label>
-                                    <div class="col-sm-3">
-                                        <div class="form-group bmd-form-group">
-                                            <select name="menu_id" class="form-control" id="MenuSelect">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
                                         </div>
                                     </div>
                                 </div>

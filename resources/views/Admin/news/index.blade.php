@@ -59,6 +59,10 @@
                                                     {{ $value->id }}
                                                 </td>
                                                 <td>
+                                                    @if($value->image)
+                                                        <img src="{{ asset('storage/' . $value->image) }}"
+                                                             style="height: 30px; width: 40px;">
+                                                    @endif
                                                     {{ $value->title }}
                                                 </td>
                                                 <td>

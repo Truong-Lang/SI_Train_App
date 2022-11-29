@@ -27,6 +27,7 @@ class NewsRequest extends FormRequest
             'title'       => ['required', 'max:256'],
             'description' => ['required'],
             'content'     => ['required'],
+            'image'       => ['required', 'image', 'mimes:jpg,jpeg,png', 'mimetypes:image/jpeg,image/png'],
             'category_id' => ['required'],
         ];
     }
@@ -42,6 +43,7 @@ class NewsRequest extends FormRequest
             'title'       => 'Title',
             'description' => 'Description',
             'content'     => 'Content',
+            'image'       => 'Image',
             'category_id' => 'Category',
         ];
     }

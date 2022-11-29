@@ -33,4 +33,9 @@ class Constant
      */
     const FORMAT_DATE_TMP           = 'Y/m/d';
     const FORMAT_YEAR_MONTH_DAY_MIN = '%Y/%m/%d %H:%i';
+
+    /**
+     * Folder name file upload
+     */
+    const NEWS_IMAGES_FOLDER = 'news';
 }

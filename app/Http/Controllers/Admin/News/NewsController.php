@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\News;
 use App\Common\Constant;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Requests\NewsRequest;
+use App\Http\Services\UploadImage\UploadImageService;
 use App\Models\Admin\Category\Category;
 use App\Models\Admin\News\News;
 use Illuminate\Contracts\Foundation\Application;
@@ -16,6 +17,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
@@ -25,14 +27,21 @@ class NewsController extends Controller
     protected News $news;
 
     /**
+     * @var UploadImageService
+     */
+    protected UploadImageService $uploadImageService;
+
+    /**
      * NewsController constructor.
      *
      * @param News $news
+     * @param UploadImageService $uploadImageService
      */
-    public function __construct(News $news)
+    public function __construct(News $news, UploadImageService $uploadImageService)
     {
         $this->middleware('auth');
         $this->news = $news;
+        $this->uploadImageService = $uploadImageService;
     }
 
     public function index()
@@ -65,7 +74,7 @@ class NewsController extends Controller
 
         $getNews = $this->news->getById($id);
         if (empty($getNews)) {
-            return redirect()->route(Constant::FOLDER_URL_ADMIN . '.news.index', [$categories]);
+            return redirect()->route(Constant::FOLDER_URL_ADMIN . '.news.index');
         }
 
 
@@ -84,17 +93,22 @@ class NewsController extends Controller
     {
         $params = $request->all();
         $params['userId'] = Auth::id();
+        $file = $request->file('image');
         DB::beginTransaction();
         try {
-            $id = $this->news->insertOrUpdate($params);
+            if (empty($params['id'])) {
+                $params['id'] = $this->news->insertOrUpdate($params);
+            }
+            $path = Constant::NEWS_IMAGES_FOLDER . '/' . $params['id'];
+            $params['old_files'] = Storage::files($path);
+
+            $params['image'] = $this->uploadImageService->uploadImage($file, $path);
+            $this->news->insertOrUpdate($params);
+
             $request->session()->flash('alert-success', __('message.MESSAGE_SUCCESS_UPDATE'));
             DB::commit();
 
-            $backUrl = route(Constant::FOLDER_URL_ADMIN . '.news.createAndEdit') . '/' . $params['id'];
-            if (empty($params['id'])) {
-                $backUrl = route(Constant::FOLDER_URL_ADMIN . '.news.createAndEdit') . '/' . $id;
-            }
-            return redirect($backUrl);
+            return redirect(route(Constant::FOLDER_URL_ADMIN . '.news.index'));
         } catch (Exception $e) {
             DB::rollBack();
             $request->session()->flash('alert-danger', __('message.TRANSACTION_FAIL'));

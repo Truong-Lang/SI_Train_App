@@ -69,10 +69,10 @@
 {{--        <script src="{{ asset('material') }}/demo/demo.js"></script>--}}
 {{--        <script src="{{ asset('material') }}/js/settings.js"></script>--}}
         <script src="{{ asset('js') }}/admin/common.js"></script>
-        <script src="https://cdn.tiny.cloud/1/rxqeqtx8cyhal2lvdqcufje9pfuekogy946mm99tthzpaa9o/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+        <script src="{{ asset('tinymce') }}/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
         <script>
             tinymce.init({
-                selector: '#input-content-area',
+                selector: '#input-tinymce-area',
                 autosave_restore_when_empty: true,
             })
         </script>
