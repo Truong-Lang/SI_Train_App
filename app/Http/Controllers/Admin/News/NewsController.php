@@ -47,7 +47,8 @@ class NewsController extends Controller
     public function index()
     {
         $listNews = $this->news->getAll();
-        return view(Constant::FOLDER_URL_ADMIN.'.news.index', compact('listNews'));
+
+        return view(Constant::FOLDER_URL_ADMIN . '.news.index', compact('listNews'));
     }
 
     /**
