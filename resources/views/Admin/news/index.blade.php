@@ -59,10 +59,8 @@
                                                     {{ $value->id }}
                                                 </td>
                                                 <td>
-                                                    @if($value->image)
-                                                        <img src="{{ asset('storage/' . $value->image) }}"
-                                                             style="height: 30px; width: 40px;">
-                                                    @endif
+                                                    <img src="{{ $value->image && file_exists(public_path('storage/' . $value->image)) ? asset('storage/' . $value->image) : url('img/img-noimage.png')}}"
+                                                         style="height: 30px; width: 40px;">
                                                     {{ $value->title }}
                                                 </td>
                                                 <td>
@@ -90,10 +88,16 @@
                                                     </div>
                                                 </td>
                                                 <td class="td-actions text-right">
-                                                    <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit',$value->id) }}" rel="tooltip" class="btn btn-success" data-original-title="" title="{{__("Edit")}}">
+                                                    <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit',$value->id) }}"
+                                                       rel="tooltip" class="btn btn-success" data-original-title=""
+                                                       title="{{__("Edit")}}">
                                                         <i class="material-icons">edit</i>
-                                                        <div class="ripple-container"></div></a>
-                                                    <button type="button" data-id="{{$value->id}}" rel="tooltip" class="btn btn-danger btn-round delete" title="{{__("Delete")}}" data-toggle="modal" data-target="#deleteModal">
+                                                        <div class="ripple-container"></div>
+                                                    </a>
+                                                    <button type="button" data-id="{{$value->id}}" rel="tooltip"
+                                                            class="btn btn-danger btn-round delete"
+                                                            title="{{__("Delete")}}" data-toggle="modal"
+                                                            data-target="#deleteModal">
                                                         <i class="material-icons">close</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
@@ -101,7 +105,9 @@
                                             </tr>
                                         @endforeach
                                     @else
-                                        <tr class="text-center"><td colspan="9">{{ __('message.NOT_DATA_SEARCH') }}</td></tr>
+                                        <tr class="text-center">
+                                            <td colspan="9">{{ __('message.NOT_DATA_SEARCH') }}</td>
+                                        </tr>
                                     @endif
                                     </tbody>
                                 </table>
@@ -109,7 +115,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

@@ -54,13 +54,13 @@
                                                       name="content">{{ old('content') ?? $getNews->content ?? '' }}</textarea>
                                             @if ($errors->has('content'))
                                                 <span id="content-error" class="error text-danger"
-                                                      for="input-content-area">{{ $errors->first('content') }}</span>
+                                                      for="input-tinymce-area">{{ $errors->first('content') }}</span>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row image">
-                                    <label class="col-sm-2 col-form-label">Image <span class="text-danger">*</span></label>
+                                    <label class="col-sm-2 col-form-label">Image </label>
                                     <div class="col-sm-10">
                                         <input type="file" class="form-control" id="image" name="image"
                                                accept="image/png, image/jpeg">
@@ -120,6 +120,7 @@
                                     </button>
                                 </div>
                                 <input type="hidden" name="id" id="news_id" value="{{ $getNews->id ?? '' }}">
+                                <input type="hidden" name="image_path" id="image_path" value="{{ $getNews->image ?? '' }}">
                             </form>
                         </div>
 

@@ -27,7 +27,7 @@ class NewsRequest extends FormRequest
             'title'       => ['required', 'max:256'],
             'description' => ['required'],
             'content'     => ['required'],
-            'image'       => ['required', 'image', 'mimes:jpg,jpeg,png', 'mimetypes:image/jpeg,image/png'],
+            'image'       => ['image', 'mimes:jpg,jpeg,png', 'mimetypes:image/jpeg,image/png'],
             'category_id' => ['required'],
         ];
     }

@@ -62,7 +62,7 @@ Route::group(['prefix' => Constant::FOLDER_URL_ADMIN_ROUTE], function () {
             ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
     });
 
-    // Category Routes...
+    // News Routes...
     Route::group(['prefix' => 'news'], function () {
         Route::get('/', Constant::FOLDER_URL_ADMIN . '\News\NewsController@index')
             ->name(Constant::FOLDER_URL_ADMIN.'.news.index');

@@ -17,7 +17,6 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
@@ -44,6 +43,9 @@ class NewsController extends Controller
         $this->uploadImageService = $uploadImageService;
     }
 
+    /**
+     * @return Application|Factory|View
+     */
     public function index()
     {
         $listNews = $this->news->getAll();
@@ -59,7 +61,6 @@ class NewsController extends Controller
     public function createAndEdit(Request $request)
     {
         $id = (int)$request->id;
-        $listNews = $this->news->getAll();
         $categories = Category::all();
         if ($id) {
             $title = __('Edit News');
@@ -69,7 +70,7 @@ class NewsController extends Controller
         if (empty($id)) {
             return view(
                 Constant::FOLDER_URL_ADMIN . '.news.create_edit',
-                compact('listNews', 'categories', 'title')
+                compact('categories', 'title')
             );
         }
 
@@ -78,10 +79,9 @@ class NewsController extends Controller
             return redirect()->route(Constant::FOLDER_URL_ADMIN . '.news.index');
         }
 
-
         return view(
             Constant::FOLDER_URL_ADMIN . '.news.create_edit',
-            compact('listNews', 'getNews', 'categories', 'title')
+            compact('getNews', 'categories', 'title')
         );
     }
 
@@ -94,17 +94,24 @@ class NewsController extends Controller
     {
         $params = $request->all();
         $params['userId'] = Auth::id();
-        $file = $request->file('image');
         DB::beginTransaction();
         try {
-            if (empty($params['id'])) {
-                $params['id'] = $this->news->insertOrUpdate($params);
-            }
-            $path = Constant::NEWS_IMAGES_FOLDER . '/' . $params['id'];
-            $params['old_files'] = Storage::files($path);
+            $id = $this->news->insertOrUpdate($params);
 
-            $params['image'] = $this->uploadImageService->uploadImage($file, $path);
-            $this->news->insertOrUpdate($params);
+            // Logic upload image
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $path = Constant::NEWS_IMAGES_FOLDER . '/' . $id;
+                $old_file = '';
+                if (!empty($params['id']) && !empty($params['image_path'])) {
+                    $old_file = $params['image_path'];
+                }
+                $params['image'] = $this->uploadImageService->uploadImage($file, $path, $old_file);
+                if (empty($params['id'])) {
+                    $params['id'] = $id;
+                }
+                $this->news->updatePathImageNews($params);
+            }
 
             $request->session()->flash('alert-success', __('message.MESSAGE_SUCCESS_UPDATE'));
             DB::commit();

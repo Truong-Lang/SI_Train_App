@@ -2,11 +2,25 @@
 
 namespace App\Http\Services\UploadImage;
 
-class UploadImageService {
+use Illuminate\Support\Facades\Storage;
 
-    public function uploadImage($file, $path)
+class UploadImageService implements UploadImage {
+
+    /**
+     * @param $file
+     * @param $path
+     * @param $old_file
+     *
+     * @return bool|string
+     */
+    public function uploadImage($file, $path, $old_file = null)
     : bool|string {
+
+        if ($old_file && Storage::exists($old_file)) {
+            Storage::delete($old_file);
+        }
         $name = $file->getClientOriginalName();
+
         return $file->storeAs($path, $name);
     }
 }

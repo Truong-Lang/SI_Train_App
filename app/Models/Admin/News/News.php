@@ -3,11 +3,8 @@
 namespace App\Models\Admin\News;
 
 use App\Common\Constant;
-use App\Models\Admin\Category\Category;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class News extends Model
 {
@@ -98,7 +95,6 @@ class News extends Model
             'description' => $params['description'],
             'content'     => $params['content'],
             'category_id' => $params['category_id'],
-            'image'       => $params['image'],
             'status'      => !empty($params['status']) ? $params['status'] : Constant::NUMBER_ZERO,
             'active'      => !empty($params['active']) ? $params['active'] : Constant::NUMBER_ZERO,
             'del_flg'     => Constant::NUMBER_ZERO,
@@ -110,34 +106,32 @@ class News extends Model
             $arrData['created_by'] = $params['userId'];
             $insertOrUpdate = DB::table($this->table)->insertGetId($arrData);
         } else {
-            Storage::delete($params['old_files']);
-            $insertOrUpdate = DB::table($this->table)
+            DB::table($this->table)
                 ->where('id', $params['id'])
                 ->update($arrData);
+
+            $insertOrUpdate = $params['id'];
         }
 
         return $insertOrUpdate;
     }
 
-    public function getCategory($where = null)
-    :mixed {
-        $sql = DB::table($this->table . ' as n');
-        if ($where) {
-            $sql->where($where);
-        }
-        $sql->join('categories as c', function ($join) {
-            $join->on('c.id', '=', 'n.category_id')
-                ->whereNull('n.deleted_at');
-        });
-        return $sql->select(
-            'c.*',
-            Db::raw(
-                'DATE_FORMAT(c.created_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as created_at'
-            ),
-            Db::raw(
-                'DATE_FORMAT(c.updated_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as updated_at'
-            ))
-            ->whereNull('c.deleted_at')
-            ->get()->first();
+    /**
+     * @param $params
+     *
+     * @return mixed
+     */
+    public function updatePathImageNews($params)
+    {
+        $dateTime = now();
+        $arrData = [
+            'image'      => $params['image'],
+            'updated_at' => $dateTime,
+            'updated_by' => $params['userId']
+        ];
+
+        DB::table($this->table)
+            ->where('id', $params['id'])
+            ->update($arrData);
     }
 }

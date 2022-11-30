@@ -127,26 +127,4 @@ class Category extends Model
                 ]);
 
     }
-
-    public function getNews($where = null)
-    : mixed {
-        $sql = DB::table($this->table . ' as c');
-        if ($where) {
-            $sql->where($where);
-        }
-        $sql->join('news as n', function ($join) {
-            $join->on('n.category_id', '=', 'c.id')
-                ->whereNull('c.deleted_at');
-        });
-        return $sql->select(
-            'n.*',
-            Db::raw(
-                'DATE_FORMAT(n.created_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as created_at'
-            ),
-            Db::raw(
-                'DATE_FORMAT(n.updated_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as updated_at'
-            ))
-            ->whereNull('n.deleted_at')
-            ->get()->first();
-    }
 }
