@@ -61,6 +61,7 @@ class News extends Model
             $join->on('n.category_id', '=', 'c.id')
                 ->whereNull('c.deleted_at');
         });
+        
         return $sql->select(
             'n.*', 'c.name as category_name',
             DB::raw("CONCAT(u.last_name,' ',u.first_name) AS full_name"),

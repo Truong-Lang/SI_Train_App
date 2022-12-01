@@ -54,8 +54,7 @@
                                                 </td>
                                                 <td>
                                                     @if($value->image)
-                                                        <img src="{{ asset('storage/' . $value->image) }}"
-                                                             style="height: 30px; width: 40px;">
+                                                        <img class="thumbnail" src="{{ asset('storage/' . $value->image) }}">
                                                     @endif
                                                     {{ $value->title }}
                                                 </td>
