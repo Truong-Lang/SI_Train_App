@@ -38,7 +38,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $listNews = $this->news->getListNews(5);
+        $listNews = $this->news->getListNews(Constant::ROWS_PER_PAGE);
 
         return view(Constant::FOLDER_URL_ADMIN . '.news.index', compact('listNews'));
     }
