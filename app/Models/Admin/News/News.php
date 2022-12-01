@@ -37,13 +37,15 @@ class News extends Model
     ];
 
     /**
+     * @param $limit
      * @param $where
      * @param $orderBy
+     * 
      *
-     * @return array
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAll($where = null, $orderBy = null)
-    : array {
+    public function getListNews($limit, $where = null, $orderBy = null)
+    {
         $sql = DB::table($this->table . ' as n');
         if ($where) {
             $sql->where($where);
@@ -69,7 +71,7 @@ class News extends Model
                 'DATE_FORMAT(n.updated_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as updated_at'
             ))
             ->whereNull('n.deleted_at')
-            ->get()->toArray();
+            ->paginate($limit);
     }
 
     /**

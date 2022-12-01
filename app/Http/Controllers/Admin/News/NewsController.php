@@ -14,7 +14,6 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use App\Utils\Paginate;
 
 class NewsController extends Controller
 {
@@ -39,9 +38,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $listNews = $this->news->getAll();
-        $listNews = Paginate::paginate($listNews, 5);
-        $listNews->setPath('');
+        $listNews = $this->news->getListNews(5);
 
         return view(Constant::FOLDER_URL_ADMIN . '.news.index', compact('listNews'));
     }
