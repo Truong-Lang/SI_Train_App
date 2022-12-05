@@ -32,16 +32,13 @@
                                             {{ __('Category') }}
                                         </th>
                                         <th>
-                                            {{ __('Status') }}
+                                            {{ __('Description') }}
                                         </th>
                                         <th>
                                             {{ __('Active') }}
                                         </th>
                                         <th>
                                             {{ __('Created') }}
-                                        </th>
-                                        <th>
-                                            {{ __('Updated') }}
                                         </th>
                                         <th>
                                             {{ __('Author') }}
@@ -56,18 +53,17 @@
                                         @foreach($listNews as $key=>$value)
                                             <tr class="text-center">
                                                 <td>
-                                                    {{ $value->id }}
+                                                    {{ $key  + $listNews->firstItem() }}
                                                 </td>
                                                 <td>
-                                                    <img src="{{ $value->image && file_exists(public_path('storage/' . $value->image)) ? asset('storage/' . $value->image) : url('img/img-noimage.png')}}"
-                                                         style="height: 30px; width: 40px;">
+                                                    <img class="thumbnail" src="{{ $value->image && file_exists(public_path('storage/' . $value->image)) ? asset('storage/' . $value->image) : url('img/img-noimage.png')}}">
                                                     {{ $value->title }}
                                                 </td>
                                                 <td>
-                                                    {{ $value->category_id }}
+                                                    {{ $value->category_name }}
                                                 </td>
                                                 <td>
-                                                    <span class="btn btn-info btn-sm">{{ $value->status }}</span>
+                                                    {{ Illuminate\Support\Str::of($value->description)->limit(30) }}
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-{{ $value->active == \App\Common\Constant::NUMBER_ONE ? 'success' : 'danger' }} btn-round btn-fab">
@@ -77,9 +73,6 @@
                                                 </td>
                                                 <td class="text-primary">
                                                     {{ $value->created_at }}
-                                                </td>
-                                                <td class="text-primary">
-                                                    {{ $value->updated_at }}
                                                 </td>
                                                 <td>
                                                     <div class="btn btn-link btn-youtube">
@@ -111,6 +104,9 @@
                                     @endif
                                     </tbody>
                                 </table>
+                                <div class="d-flex justify-content-center">
+                                    {{ $listNews->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -118,4 +114,6 @@
             </div>
         </div>
     </div>
+    @include(\App\Common\Constant::FOLDER_URL_ADMIN.'.commons.modal_delete')
+
 @endsection

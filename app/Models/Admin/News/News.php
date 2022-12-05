@@ -37,13 +37,15 @@ class News extends Model
     ];
 
     /**
+     * @param $limit
      * @param $where
      * @param $orderBy
+     * 
      *
-     * @return array
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAll($where = null, $orderBy = null)
-    : array {
+    public function getListNews($limit, $where = null, $orderBy = null)
+    {
         $sql = DB::table($this->table . ' as n');
         if ($where) {
             $sql->where($where);
@@ -55,8 +57,13 @@ class News extends Model
             $join->on('u.id', '=', 'n.updated_by')
                 ->whereNull('u.deleted_at');
         });
+        $sql->join('categories as c', function ($join) {
+            $join->on('n.category_id', '=', 'c.id')
+                ->whereNull('c.deleted_at');
+        });
+        
         return $sql->select(
-            'n.*',
+            'n.*', 'c.name as category_name',
             DB::raw("CONCAT(u.last_name,' ',u.first_name) AS full_name"),
             DB::raw(
                 'DATE_FORMAT(n.created_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as created_at'
@@ -65,7 +72,7 @@ class News extends Model
                 'DATE_FORMAT(n.updated_at, "' . Constant::FORMAT_YEAR_MONTH_DAY_MIN . '") as updated_at'
             ))
             ->whereNull('n.deleted_at')
-            ->get()->toArray();
+            ->paginate($limit);
     }
 
     /**
@@ -133,5 +140,21 @@ class News extends Model
         DB::table($this->table)
             ->where('id', $params['id'])
             ->update($arrData);
+    }
+
+    /**
+     * @param $params
+     *
+     * @return int
+     */
+    public function deleteNews($params)
+    : int {
+        return DB::table($this->table)
+            ->where('id', $params['id'])
+            ->update([
+                'del_flg'    => 1,
+                'deleted_at' => now(),
+                'deleted_by' => $params['userId'],
+            ]);
     }
 }

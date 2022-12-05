@@ -48,7 +48,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $listNews = $this->news->getAll();
+        $listNews = $this->news->getListNews(Constant::ROWS_PER_PAGE);
 
         return view(Constant::FOLDER_URL_ADMIN . '.news.index', compact('listNews'));
     }
@@ -113,6 +113,30 @@ class NewsController extends Controller
                 $this->news->updatePathImageNews($params);
             }
 
+            $request->session()->flash('alert-success', __('message.MESSAGE_SUCCESS_UPDATE'));
+            DB::commit();
+
+            return redirect(route(Constant::FOLDER_URL_ADMIN . '.news.index'));
+        } catch (Exception $e) {
+            DB::rollBack();
+            $request->session()->flash('alert-danger', __('message.TRANSACTION_FAIL'));
+
+            return Redirect::back();
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Application|RedirectResponse|Redirector
+     */
+    public function delete(Request $request)
+    {
+        $params = $request->all();
+        $params['userId'] = Auth::id();
+        DB::beginTransaction();
+        try {
+            $this->news->deleteNews($params);
             $request->session()->flash('alert-success', __('message.MESSAGE_SUCCESS_UPDATE'));
             DB::commit();
 

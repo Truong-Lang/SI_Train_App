@@ -38,4 +38,9 @@ class Constant
      * Folder name file upload
      */
     const NEWS_IMAGES_FOLDER = 'news';
+
+    /**
+     * Default page rows
+     */
+    const ROWS_PER_PAGE = 5;
 }
