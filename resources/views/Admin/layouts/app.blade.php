@@ -70,6 +70,13 @@
 {{--        <script src="{{ asset('material') }}/demo/demo.js"></script>--}}
 {{--        <script src="{{ asset('material') }}/js/settings.js"></script>--}}
         <script src="{{ asset('js') }}/admin/common.js"></script>
+        <script src="{{ asset('js') }}/plugin/tinymce/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            tinymce.init({
+                selector: '#input-tinymce-area',
+                autosave_restore_when_empty: true,
+            })
+        </script>
         @stack('js')
     </body>
 </html>

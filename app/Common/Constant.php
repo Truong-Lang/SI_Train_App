@@ -35,6 +35,11 @@ class Constant
     const FORMAT_YEAR_MONTH_DAY_MIN = '%Y/%m/%d %H:%i';
 
     /**
+     * Folder name file upload
+     */
+    const NEWS_IMAGES_FOLDER = 'news';
+
+    /**
      * Default page rows
      */
     const ROWS_PER_PAGE = 5;

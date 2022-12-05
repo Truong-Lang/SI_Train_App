@@ -76,6 +76,73 @@ class News extends Model
     }
 
     /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function getById($id)
+    : mixed {
+        return DB::table($this->table)
+            ->select('*')
+            ->where('id', $id)
+            ->whereNull('deleted_at')
+            ->get()->first();
+    }
+
+    /**
+     * @param $params
+     *
+     * @return int
+     */
+    public function insertOrUpdate($params)
+    : int {
+        $dateTime = now();
+        $arrData = [
+            'title'       => $params['title'],
+            'description' => $params['description'],
+            'content'     => $params['content'],
+            'category_id' => $params['category_id'],
+            'status'      => !empty($params['status']) ? $params['status'] : Constant::NUMBER_ZERO,
+            'active'      => !empty($params['active']) ? $params['active'] : Constant::NUMBER_ZERO,
+            'del_flg'     => Constant::NUMBER_ZERO,
+            'updated_at'  => $dateTime,
+            'updated_by'  => $params['userId']
+        ];
+        if (empty($params['id'])) {
+            $arrData['created_at'] = $dateTime;
+            $arrData['created_by'] = $params['userId'];
+            $insertOrUpdate = DB::table($this->table)->insertGetId($arrData);
+        } else {
+            DB::table($this->table)
+                ->where('id', $params['id'])
+                ->update($arrData);
+
+            $insertOrUpdate = $params['id'];
+        }
+
+        return $insertOrUpdate;
+    }
+
+    /**
+     * @param $params
+     *
+     * @return mixed
+     */
+    public function updatePathImageNews($params)
+    {
+        $dateTime = now();
+        $arrData = [
+            'image'      => $params['image'],
+            'updated_at' => $dateTime,
+            'updated_by' => $params['userId']
+        ];
+
+        DB::table($this->table)
+            ->where('id', $params['id'])
+            ->update($arrData);
+    }
+
+    /**
      * @param $params
      *
      * @return int

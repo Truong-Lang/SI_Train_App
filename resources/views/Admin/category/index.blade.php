@@ -53,7 +53,7 @@
                                     @foreach($listParent as $key => $value)
                                         <tr class="text-center">
                                             <td>
-                                                1
+                                                {{ $value->id }}
                                             </td>
                                             <td>
                                                 {{ $value->name }}

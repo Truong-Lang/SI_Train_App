@@ -6,14 +6,17 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
+                @include(\App\Common\Constant::FOLDER_URL_ADMIN.'.commons.flash_message')
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header card-header-primary">
                             <h4 class="card-title ">{{ __('News Management') }}</h4>
                         </div>
                         <div class="card-body">
-                            <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit') }}" class="btn btn-success pull-right" >
-                                <i class="material-icons">add</i> {{ __('button.CREATE') }}<div class="ripple-container"></div>
+                            <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit') }}"
+                               class="btn btn-success pull-right">
+                                <i class="material-icons">add</i> {{ __('button.CREATE') }}
+                                <div class="ripple-container"></div>
                             </a>
                             <div class="table-responsive">
                                 <table class="table">
@@ -53,9 +56,7 @@
                                                     {{ $key  + $listNews->firstItem() }}
                                                 </td>
                                                 <td>
-                                                    @if($value->image)
-                                                        <img class="thumbnail" src="{{ asset('storage/' . $value->image) }}">
-                                                    @endif
+                                                    <img class="thumbnail" src="{{ $value->image && file_exists(public_path('storage/' . $value->image)) ? asset('storage/' . $value->image) : url('img/img-noimage.png')}}">
                                                     {{ $value->title }}
                                                 </td>
                                                 <td>
@@ -80,10 +81,16 @@
                                                     </div>
                                                 </td>
                                                 <td class="td-actions text-right">
-                                                    <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit',$value->id) }}" rel="tooltip" class="btn btn-success" data-original-title="" title="{{__("Edit")}}">
+                                                    <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit',$value->id) }}"
+                                                       rel="tooltip" class="btn btn-success" data-original-title=""
+                                                       title="{{__("Edit")}}">
                                                         <i class="material-icons">edit</i>
-                                                        <div class="ripple-container"></div></a>
-                                                    <button type="button" data-id="{{$value->id}}" rel="tooltip" class="btn btn-danger btn-round delete" title="{{__("Delete")}}" data-toggle="modal" data-target="#deleteModal">
+                                                        <div class="ripple-container"></div>
+                                                    </a>
+                                                    <button type="button" data-id="{{$value->id}}" rel="tooltip"
+                                                            class="btn btn-danger btn-round delete"
+                                                            title="{{__("Delete")}}" data-toggle="modal"
+                                                            data-target="#deleteModal">
                                                         <i class="material-icons">close</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
@@ -91,7 +98,9 @@
                                             </tr>
                                         @endforeach
                                     @else
-                                        <tr class="text-center"><td colspan="9">{{ __('message.NOT_DATA_SEARCH') }}</td></tr>
+                                        <tr class="text-center">
+                                            <td colspan="9">{{ __('message.NOT_DATA_SEARCH') }}</td>
+                                        </tr>
                                     @endif
                                     </tbody>
                                 </table>

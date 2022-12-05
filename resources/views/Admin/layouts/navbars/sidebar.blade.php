@@ -25,7 +25,7 @@
         <div class="collapse show" id="laravelExample">
           <ul class="nav">
             <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
-              <a class="nav-link" href="">
+              <a class="nav-link" href="{{ route('profile.edit') }}">
                 <span class="sidebar-mini"> UP </span>
                 <span class="sidebar-normal">{{ __('User profile') }} </span>
               </a>
@@ -48,7 +48,7 @@
       </li>
 
       <li class="nav-item{{ $activePage == 'news' ? ' active' : '' }}">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.index') }}">
           <i class="material-icons">content_paste</i>
             <p>{{ __('News Management') }}</p>
         </a>
