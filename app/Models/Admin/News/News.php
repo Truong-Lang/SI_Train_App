@@ -29,6 +29,7 @@ class News extends Model
      */
     protected $fillable = [
         'title',
+        'alias',
         'description',
         'content',
         'image',
@@ -99,6 +100,7 @@ class News extends Model
         $dateTime = now();
         $arrData = [
             'title'       => $params['title'],
+            'alias'       => $params['alias'],
             'description' => $params['description'],
             'content'     => $params['content'],
             'category_id' => $params['category_id'],
@@ -156,5 +158,29 @@ class News extends Model
                 'deleted_at' => now(),
                 'deleted_by' => $params['userId'],
             ]);
+    }
+
+    public function getAllByCategory($where = null)
+    {
+        $sql = DB::table($this->table . ' as n');
+        $sql->join('categories as c', function ($join) {
+            $join->on('n.category_id', '=', 'c.id')
+                ->whereNull('c.deleted_at');
+        });
+        if ($where) {
+            $sql->where($where);
+        }
+        return $sql->select('n.*')
+            ->whereNull('n.deleted_at')
+            ->get();
+    }
+
+    public function getByAlias($alias)
+    {
+        return DB::table($this->table)
+            ->select('*')
+            ->where('alias', 'like', $alias)
+            ->whereNull('deleted_at')
+            ->get()->first();
     }
 }

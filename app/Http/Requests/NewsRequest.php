@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class NewsRequest extends FormRequest
 {
@@ -23,8 +24,17 @@ class NewsRequest extends FormRequest
      */
     public function rules()
     {
+        $category_id = $this->category_id;
+        $id = $this->id;
+
         return [
             'title'       => ['required', 'max:256'],
+            'alias'       => [
+                'required',
+                'max:256',
+                Rule::unique('news')->where(fn($query) => $query->where('category_id', $category_id))
+                    ->ignore($id ?? null)
+            ],
             'description' => ['required'],
             'content'     => ['required'],
             'image'       => ['image', 'mimes:jpg,jpeg,png', 'mimetypes:image/jpeg,image/png'],
@@ -41,10 +51,21 @@ class NewsRequest extends FormRequest
     {
         return [
             'title'       => 'Title',
+            'alias'       => 'Alias',
             'description' => 'Description',
             'content'     => 'Content',
             'image'       => 'Image',
             'category_id' => 'Category',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function messages()
+    {
+        return [
+            'alias.unique' => 'The Alias News of this category has already been taken. Please use another Title.'
         ];
     }
 }

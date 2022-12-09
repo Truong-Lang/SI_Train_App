@@ -24,10 +24,23 @@
                                     <div class="col-sm-10">
                                         <div class="form-group {{ $errors->has('title') ? 'has-danger' : '' }} bmd-form-group">
                                             <input type="text" class="form-control" name="title" id="input-title"
-                                                   value="{{ old('title') ?? $getNews->title ?? '' }}">
+                                                   value="{{ old('title') ?? $getNews->title ?? '' }}" oninput="createAlias(this.id)" >
                                             @if ($errors->has('title'))
                                                 <span id="name-error" class="error text-danger"
                                                       for="input-title">{{ $errors->first('title') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-2 col-form-label">Alias </label>
+                                    <div class="col-sm-10">
+                                        <div class="form-group {{ $errors->has('alias') ? 'has-danger' : '' }} bmd-form-group">
+                                            <input type="text" class="form-control" name="alias" id="alias"
+                                                   value="{{ old('alias') ?? $getNews->alias ?? '' }}" readonly >
+                                            @if ($errors->has('alias'))
+                                                <span id="alias-error" class="error text-danger"
+                                                      for="alias">{{ $errors->first('alias') }}</span>
                                             @endif
                                         </div>
                                     </div>

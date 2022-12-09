@@ -92,6 +92,7 @@ class Category extends Model
         $dateTime = now();
         $arrData = [
             'name'       => $params['name'],
+            'alias'      => $params['alias'],
             'parent'     => !empty($params['parent']) ? $params['parent'] : Constant::NUMBER_ZERO,
             'status'     => !empty($params['status']) ? $params['status'] : Constant::NUMBER_ZERO,
             'active'     => !empty($params['active']) ? $params['active'] : Constant::NUMBER_ZERO,
@@ -126,5 +127,14 @@ class Category extends Model
                     'deleted_by' => $params['userId'],
                 ]);
 
+    }
+
+    public function getByAlias($alias)
+    {
+        return DB::table($this->table)
+            ->select('*')
+            ->where('alias', 'like', $alias)
+            ->whereNull('deleted_at')
+            ->get()->first();
     }
 }

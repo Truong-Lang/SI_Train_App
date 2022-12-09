@@ -14,6 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view(Constant::FOLDER_URL_FRONTEND . '.News.index');
-});
+// Home Routes...
+Route::get('/{categoryAlias?}/{newsAlias?}', 'FrontEnd\HomeController@index')->name(Constant::FOLDER_URL_HOME . '.index');

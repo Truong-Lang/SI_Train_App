@@ -20,9 +20,22 @@
                                     <label class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
                                     <div class="col-sm-10">
                                         <div class="form-group {{ $errors->has('name') ? 'has-danger' : '' }} bmd-form-group">
-                                            <input type="text" class="form-control" name="name" id="input-name" value="{{ old('name') ?? $getCategory->name ?? '' }}">
+                                            <input type="text" class="form-control" name="name" id="input-name" value="{{ old('name') ?? $getCategory->name ?? '' }}" oninput="createAlias(this.id)">
                                             @if ($errors->has('name'))
                                                 <span id="name-error" class="error text-danger" for="input-name">{{ $errors->first('name') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-2 col-form-label">Alias </label>
+                                    <div class="col-sm-10">
+                                        <div class="form-group {{ $errors->has('alias') ? 'has-danger' : '' }} bmd-form-group">
+                                            <input type="text" class="form-control" name="alias" id="alias"
+                                                   value="{{ old('alias') ?? $getCategory->alias ?? '' }}" readonly>
+                                            @if ($errors->has('alias'))
+                                                <span id="alias-error" class="error text-danger"
+                                                      for="alias">{{ $errors->first('alias') }}</span>
                                             @endif
                                         </div>
                                     </div>
