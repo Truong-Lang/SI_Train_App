@@ -128,13 +128,4 @@ class Category extends Model
                 ]);
 
     }
-
-    public function getByAlias($alias)
-    {
-        return DB::table($this->table)
-            ->select('*')
-            ->where('alias', 'like', $alias)
-            ->whereNull('deleted_at')
-            ->get()->first();
-    }
 }

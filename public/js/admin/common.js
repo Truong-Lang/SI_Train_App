@@ -14,8 +14,7 @@ $("#number").on("keydown", function (e) {
 function createAlias(id) {
     let str = document.getElementById(id).value;
     let alias = document.getElementById("alias");
-    str = str.replace(/^\s+|\s+$/g, "");
-    str = str.toLowerCase();
+    str = str.replace(/^\s+|\s+$/g, "").toLowerCase();
 
     var from = "àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ·/_,:;";
     var to = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyd------";

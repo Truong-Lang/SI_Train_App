@@ -21,8 +21,6 @@ class Constant
     const FOLDER_URL_ADMIN_ROUTE = 'admin';
     const FOLDER_URL_ADMIN       = 'Admin';
     const FOLDER_URL_FRONTEND    = 'FrontEnd';
-    const FOLDER_URL_HOME_ROUTE  = 'home';
-    const FOLDER_URL_HOME        = 'Home';
 
     /**
      * Define number

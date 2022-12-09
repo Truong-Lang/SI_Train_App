@@ -13,9 +13,9 @@
     <link href="{{ asset('css') }}/ocean.css" rel="stylesheet" media="all"/>
 </head>
 <body>
-@include(\App\Common\Constant::FOLDER_URL_HOME . '.layouts.header')
+@include(\App\Common\Constant::FOLDER_URL_FRONTEND . '.layouts.headers.header')
 @yield('content')
-@include(\App\Common\Constant::FOLDER_URL_HOME . '.layouts.footer')
+@include(\App\Common\Constant::FOLDER_URL_FRONTEND . '.layouts.footers.footer')
 
 <script src="{{ asset('js') }}/home/app.js"></script>
 <button onclick="animateToTop(event)" id="myBtn" title="Go to top">Top</button>

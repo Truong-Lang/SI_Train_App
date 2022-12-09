@@ -41,7 +41,6 @@ class News extends Model
      * @param $limit
      * @param $where
      * @param $orderBy
-     * 
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -62,7 +61,7 @@ class News extends Model
             $join->on('n.category_id', '=', 'c.id')
                 ->whereNull('c.deleted_at');
         });
-        
+
         return $sql->select(
             'n.*', 'c.name as category_name',
             DB::raw("CONCAT(u.last_name,' ',u.first_name) AS full_name"),
@@ -158,29 +157,5 @@ class News extends Model
                 'deleted_at' => now(),
                 'deleted_by' => $params['userId'],
             ]);
-    }
-
-    public function getAllByCategory($where = null)
-    {
-        $sql = DB::table($this->table . ' as n');
-        $sql->join('categories as c', function ($join) {
-            $join->on('n.category_id', '=', 'c.id')
-                ->whereNull('c.deleted_at');
-        });
-        if ($where) {
-            $sql->where($where);
-        }
-        return $sql->select('n.*')
-            ->whereNull('n.deleted_at')
-            ->get();
-    }
-
-    public function getByAlias($alias)
-    {
-        return DB::table($this->table)
-            ->select('*')
-            ->where('alias', 'like', $alias)
-            ->whereNull('deleted_at')
-            ->get()->first();
     }
 }
