@@ -3,7 +3,6 @@
 namespace App\Models\FrontEnd\News;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class News extends Model
@@ -33,30 +32,29 @@ class News extends Model
     ];
 
     /**
-     * @param $category_id
-     *
-     * @return Collection
-     */
-    public function getAllByCategoryId($category_id = null)
-    {
-        return DB::table($this->table)
-            ->select('*')
-            ->where('category_id', $category_id)
-            ->whereNull('deleted_at')
-            ->get();
-    }
-
-    /**
-     * @param $alias
+     * @param null $where
+     * @param bool $first
      *
      * @return mixed
      */
-    public function getByAlias($alias)
+    public function getAll($where = null, bool $first = false)
     {
-        return DB::table($this->table)
-            ->select('*')
-            ->where('alias', $alias)
-            ->whereNull('deleted_at')
-            ->get()->first();
+        $sql = DB::table($this->table . ' as n')
+            ->join('categories as c', function ($join) {
+                $join->on('n.category_id', '=', 'c.id')
+                    ->whereNull('c.deleted_at');
+            })
+            ->select('*', 'n.alias AS news_alias');
+        if ($where) {
+            $sql->where($where);
+        }
+
+        $sql->whereNull('n.deleted_at');
+
+        if ($first) {
+            return $sql->get()->first();
+        } else {
+            return $sql->get();
+        }
     }
 }

@@ -17,7 +17,7 @@
             <nav>
                 <ul class="main-menu d-none d-lg-inline">
                     @foreach($listCategories as $key=>$value)
-                        <li><a class="{{ $category && $value->id == $category->id ? 'active' : '' }}"
+                        <li><a class="{{ $categoryAlias && $value->alias == $categoryAlias ? 'active' : '' }}"
                                href="{{ route(\App\Common\Constant::FOLDER_URL_FRONTEND . '.news.detail', $value->alias) }}">{{ $value->name }}</a>
                         </li>
                     @endforeach

@@ -42,11 +42,9 @@ class NewsController extends Controller
     public function index(Request $request)
     {
         $categoryAlias = (string)$request->categoryAlias;
-        $listCategories = $this->category->getAll();
-        $category = $this->category->getByAlias($categoryAlias);
-        $listNews = $category ? $this->news->getAllByCategoryId($category->id) : '';
+        $listNews = $this->news->getAll([['c.alias', $categoryAlias]]);
 
-        return view(Constant::FOLDER_URL_FRONTEND . '.news.index', compact('listCategories', 'category', 'listNews'));
+        return view(Constant::FOLDER_URL_FRONTEND . '.news.index', compact('categoryAlias', 'listNews'));
     }
 
     /**
@@ -58,19 +56,14 @@ class NewsController extends Controller
     {
         $categoryAlias = (string)$request->categoryAlias;
         $newsAlias = (string)$request->newsAlias;
-        $category = $this->category->getByAlias($categoryAlias);
-        if (empty($category)) {
-            return redirect()->route(Constant::FOLDER_URL_FRONTEND . '.news.index');
-        }
-
-        $listNews = $this->news->getAllByCategoryId($category->id);
-        $listCategories = $this->category->getAll();
-        $getNews = $this->news->getByAlias($newsAlias);
+        $getNews = $this->news->getAll([['n.alias', $newsAlias], ['c.alias', $categoryAlias]], true);
         if (empty($getNews)) {
             return redirect()->route(Constant::FOLDER_URL_FRONTEND . '.news.index', [$categoryAlias]);
         }
 
+        $listNews = $this->news->getAll([['c.alias', $categoryAlias]]);
+
         return view(Constant::FOLDER_URL_FRONTEND . '.news.detail',
-            compact('newsAlias', 'category', 'listNews', 'listCategories', 'getNews'));
+            compact('categoryAlias', 'newsAlias', 'getNews', 'listNews'));
     }
 }

@@ -3,9 +3,9 @@
 @section('content')
     <main class="mt-30">
         <div class="container">
-            @if($category)
+            @if($categoryAlias && $listNews->isNotEmpty())
                 <div class="archive-header">
-                    <h2 class="font-weight-bold"><span class="font-family-normal">{{ $category->name }}</span></h2>
+                    <h2 class="font-weight-bold"><span class="font-family-normal">{{ $listNews->first()->name }}</span></h2>
                     <span class="line-dots mt-20 mb-20"></span>
                 </div>
                 <div class="row vertical-divider">
@@ -18,21 +18,17 @@
                                     <th>Link</th>
                                     </thead>
                                     <tbody>
-                                    @if($listNews->isNotEmpty())
-                                        @foreach($listNews as $key=>$value)
-                                            <tr>
-                                                <td>{{ $loop->iteration  . ': ' . $value->title }} </td>
-                                                <td>
-                                                    <a class="btn btn-outline-dark" href="{{ url()->current() }}/{{ $value->alias }}">Xem</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
+                                    @foreach($listNews as $key=>$value)
                                         <tr>
-                                            <td>{{ __('(Empty)') }}</td>
-                                            <td>{{ __('(Empty)') }}</td>
+                                            <td>
+                                                <a href="{{ url()->current() }}/{{ $value->news_alias }}">{{ $loop->iteration  . ': ' . $value->title }}</a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-dark"
+                                                   href="{{ url()->current() }}/{{ $value->news_alias }}">Xem</a>
+                                            </td>
                                         </tr>
-                                    @endif
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>

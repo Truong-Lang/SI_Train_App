@@ -8,8 +8,8 @@
         <div>
             <ul class="list-group list-group-flush">
                 @foreach($listNews as $key=>$value)
-                    <li class="list-group-item {{ request()->newsAlias == $value->alias ? 'list-group-item-dark' : '' }} pl-1 pr-0 ">
-                        <a href="{{ route(\App\Common\Constant::FOLDER_URL_FRONTEND . '.news.detail', [$category->alias, $value->alias]) }}">
+                    <li class="list-group-item {{ $newsAlias == $value->news_alias ? 'list-group-item-dark' : '' }} pl-1 pr-0 ">
+                        <a href="{{ route(\App\Common\Constant::FOLDER_URL_FRONTEND . '.news.detail', [$categoryAlias, $value->news_alias]) }}">
                             {{ $loop->iteration  . ': ' . $value->title }}
                         </a>
                     </li>

@@ -8,7 +8,7 @@
                     <div class="entry-header mb-30">
                         <h1 class="entry-title mb-30 font-weight-500">
                             @foreach($listNews as $key=>$value)
-                                @if($getNews->id == $value->id)
+                                @if($getNews->news_alias == $value->news_alias)
                                     {{ $loop->iteration . ': ' . $getNews->title }}
                                 @endif
                             @endforeach
