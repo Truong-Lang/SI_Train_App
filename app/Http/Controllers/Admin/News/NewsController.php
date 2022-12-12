@@ -61,7 +61,7 @@ class NewsController extends Controller
     public function createAndEdit(Request $request)
     {
         $id = (int)$request->id;
-        $categories = Category::all();
+        $categories = Category::all()->whereNull('deleted_at');
         if ($id) {
             $title = __('Edit News');
         } else {

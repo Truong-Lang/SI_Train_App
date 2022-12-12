@@ -32,7 +32,8 @@ class NewsRequest extends FormRequest
             'alias'       => [
                 'required',
                 'max:256',
-                Rule::unique('news')->where(fn($query) => $query->where('category_id', $category_id))
+                Rule::unique('news')->where(fn($query) => $query->where('category_id', $category_id)
+                    ->whereNull('deleted_at'))
                     ->ignore($id ?? null)
             ],
             'description' => ['required'],

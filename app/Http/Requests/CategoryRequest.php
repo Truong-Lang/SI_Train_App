@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CategoryRequest extends FormRequest
 {
@@ -25,7 +26,11 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name'  => ['required', 'max:256'],
-            'alias' => ['required', 'max:256', 'unique:categories,alias,' . $this->id],
+            'alias' => [
+                'required',
+                'max:256',
+                Rule::unique('categories')->whereNull('deleted_at')->ignore($this->id ?? null)
+            ],
         ];
     }
 
@@ -39,6 +44,16 @@ class CategoryRequest extends FormRequest
         return [
             'name'  => 'Name',
             'alias' => 'Alias'
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function messages()
+    {
+        return [
+            'alias.unique' => 'The :attribute has already been taken. Please use another Title.'
         ];
     }
 }
