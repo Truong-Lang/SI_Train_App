@@ -29,9 +29,10 @@ Route::group(['prefix' => Constant::FOLDER_URL_ADMIN_ROUTE], function () {
         ->name(Constant::FOLDER_URL_ADMIN . '.logout');
 
     // Registration Routes...
-    Route::get('register', Constant::FOLDER_URL_ADMIN . '\Auth\RegisterController@showRegistrationForm')
-        ->name(Constant::FOLDER_URL_ADMIN.'.register');
-    Route::post('register', Constant::FOLDER_URL_ADMIN . '\Auth\RegisterController@register');
+    Route::get('/register', Constant::FOLDER_URL_ADMIN . '\Auth\RegisterController@showRegistrationForm')
+        ->name(Constant::FOLDER_URL_ADMIN.'.auth.showRegister');
+    Route::post('/register', Constant::FOLDER_URL_ADMIN . '\Auth\RegisterController@register')
+        ->name(Constant::FOLDER_URL_ADMIN.'.auth.register');
 
     // Password Reset Routes...
     Route::group(['prefix' => 'password'], function () {
