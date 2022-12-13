@@ -18,7 +18,7 @@
           </a>
         </li>
         <li class="nav-item{{ $activePage == 'register' ? ' active' : '' }}">
-          <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.register') }}" class="nav-link">
+          <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.auth.register') }}" class="nav-link">
             <i class="material-icons">person_add</i> {{ __('Register') }}
           </a>
         </li>
