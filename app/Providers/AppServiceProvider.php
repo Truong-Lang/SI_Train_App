@@ -25,5 +25,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
+        view()->composer(
+            \App\Common\Constant::FOLDER_URL_FRONTEND . '.layouts.headers.header',
+            function ($view) {
+                $view->with('listCategories', \App\Models\FrontEnd\Category\Category::whereNull('deleted_at')->get());
+            }
+        );
     }
 }

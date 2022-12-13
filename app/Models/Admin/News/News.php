@@ -29,6 +29,7 @@ class News extends Model
      */
     protected $fillable = [
         'title',
+        'alias',
         'description',
         'content',
         'image',
@@ -40,7 +41,6 @@ class News extends Model
      * @param $limit
      * @param $where
      * @param $orderBy
-     * 
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -61,7 +61,7 @@ class News extends Model
             $join->on('n.category_id', '=', 'c.id')
                 ->whereNull('c.deleted_at');
         });
-        
+
         return $sql->select(
             'n.*', 'c.name as category_name',
             DB::raw("CONCAT(u.last_name,' ',u.first_name) AS full_name"),
@@ -99,6 +99,7 @@ class News extends Model
         $dateTime = now();
         $arrData = [
             'title'       => $params['title'],
+            'alias'       => $params['alias'],
             'description' => $params['description'],
             'content'     => $params['content'],
             'category_id' => $params['category_id'],

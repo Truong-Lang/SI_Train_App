@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view(Constant::FOLDER_URL_FRONTEND . '.News.index');
-});
+// Home Routes...
+Route::get('/{categoryAlias?}', Constant::FOLDER_URL_FRONTEND . '\News\NewsController@index')
+    ->name(Constant::FOLDER_URL_FRONTEND . '.news.index');
+Route::get('/{categoryAlias?}/{newsAlias?}', Constant::FOLDER_URL_FRONTEND . '\News\NewsController@getDataNewsDetail')
+    ->name(Constant::FOLDER_URL_FRONTEND . '.news.detail');

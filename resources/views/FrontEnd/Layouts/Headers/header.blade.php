@@ -1,51 +1,34 @@
-<nav class="content-header">
-    <div class="container-fluid row align-items-center p-0 m-0">
-        <div class="logo col-sm-3 col-md-3 col-lg-3 col-xl-2">
-            <a href="{{ route(''.\App\Common\Constant::FOLDER_URL_ADMIN.'.top') }}" class="logo-normal">
-                <img src="{{ asset('img') }}/logo_new.png">
-            </a>
-        </div>
-        <div class="content-menu col-sm-6 col-md-6 col-lg-6 col-xl-8">
-            {{--      <ul class="navbar-nav d-flex flex-row align-items-center">--}}
-            {{--        <li class="nav-item">--}}
-            {{--          <a href="/bukken_search" class="global-menu-link">物件検索</a>--}}
-            {{--        </li>--}}
-            {{--        <li class="nav-item">--}}
-            {{--          <a href="/tasklist" class="global-menu-link">タスクリスト</a>--}}
-            {{--        </li>--}}
-            {{--        <li class="nav-item">--}}
-            {{--          <a href="/advance_materials_submission" class="global-menu-link">事前資料提出</a>--}}
-            {{--        </li>--}}
-            {{--        <li class="nav-item">--}}
-            {{--          <a href="/owner_club" class="global-menu-link">オーナー会</a>--}}
-            {{--        </li>--}}
-            {{--        <li class="nav-item">--}}
-            {{--          <a href="/complete_guarantee" class="global-menu-link">完成保証</a>--}}
-            {{--        </li>--}}
-            {{--        <li class="nav-item">--}}
-            {{--          <a href="/monthly-report-search" class="global-menu-link">着工月次報告</a>--}}
-            {{--        </li>--}}
-            {{--      </ul>--}}
-        </div>
-        <div class="col-sm-3 col-md-3 col-lg-3 col-xl-2 d-flex justify-content-end dropdown">
-            <button type="button" class="btn dropdown-toggle account-info" data-toggle="dropdown">
-                <img src="{{ asset('img') }}/avatar.png" class="avatar">
-                 {{ !empty($userName) ? $userName : '' }}
-            </button>
-            <div class="header-menu-right dropdown-menu dropdown-menu-right">
-                @if($headerMenu)
-                    @foreach($headerMenu as $items)
-                        @if ($items->seq == 2)
-                        <a class="dropdown-item"
-                           href="{{ route(''.\App\Common\Constant::FOLDER_URL_ADMIN.'.logout') }}"
-                           onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ $items->name }}
-                        </a>
-                        @else
-                            <a class="dropdown-item" href="{{ !empty($items->url) ? '/'. \App\Common\Constant::FOLDER_URL_ADMIN_ROUTE . '/' . $items->url : '' }}">{{ $items->name }}</a>
-                        @endif
-                    @endforeach
-                @endif
-            </div>
+<header class="main-header header-style-2 header-sticky">
+    <div class="container pt-30 pb-30 position-relative text-center header-top">
+        <div class="logo-text">
+            <h1 class="logo text-uppercase d-md-inline d-none">
+                <a href="#">
+                    <img src="{{ url('img/logoIDS.png') }}" alt="IDS Vietnam"/>
+                </a>
+            </h1>
+            <p class="head-line font-heading text-muted d-none d-lg-block">IDS Vietnam</p>
         </div>
     </div>
-</nav>
+    <div class="main-navigation text-center text-uppercase font-heading">
+        <div class="container">
+            <div class="horizontal-divider-black"></div>
+        </div>
+        <div class="main-nav d-none d-lg-block">
+            <nav>
+                <ul class="main-menu d-none d-lg-inline">
+                    @foreach($listCategories as $key=>$value)
+                        <li><a class="{{ $categoryAlias && $value->alias == $categoryAlias ? 'active' : '' }}"
+                               href="{{ route(\App\Common\Constant::FOLDER_URL_FRONTEND . '.news.detail', $value->alias) }}">{{ $value->name }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </nav>
+        </div>
+        <div class="container">
+            <div class="horizontal-divider-black mb-1px"></div>
+        </div>
+        <div class="container">
+            <div class="horizontal-divider-black"></div>
+        </div>
+    </div>
+</header>
