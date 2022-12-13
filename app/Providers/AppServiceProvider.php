@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(
             \App\Common\Constant::FOLDER_URL_FRONTEND . '.layouts.headers.header',
             function ($view) {
-                $view->with('listCategories', \App\Models\FrontEnd\Category\Category::all()->whereNull('deleted_at'));
+                $view->with('listCategories', \App\Models\FrontEnd\Category\Category::whereNull('deleted_at')->get());
             }
         );
     }
