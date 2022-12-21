@@ -1,5 +1,5 @@
 @extends(\App\Common\Constant::FOLDER_URL_ADMIN.'.layouts.app', [
-'activePage' => 'category', 'titlePage' => __('Category Management'), 'title' => __('Category Management')])
+'activePage' => 'role', 'titlePage' => __('Role Management'), 'title' => __('Role Management')])
 
 @section('content')
 
@@ -10,16 +10,12 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">{{ __('Category Management') }}</h4>
+                        <h4 class="card-title ">{{ __('Role Management') }}</h4>
                     </div>
                     <div class="card-body">
-                        @cannot(\App\Common\Constant::GATE_ROLE_IS_ADMIN)
-                            <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.category.createAndEdit') }}"
-                               class="btn btn-success pull-right">
-                                <i class="material-icons">add</i> {{ __('button.CREATE') }}
-                                <div class="ripple-container"></div>
-                            </a>
-                        @endcannot
+                        <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.role.createAndEdit') }}" class="btn btn-success pull-right" >
+                            <i class="material-icons">add</i> {{ __('button.CREATE') }}<div class="ripple-container"></div>
+                        </a>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class=" text-primary">
@@ -29,12 +25,6 @@
                                     </th>
                                     <th>
                                         {{ __('Name') }}
-                                    </th>
-                                    <th>
-                                        {{ __('Name Parent') }}
-                                    </th>
-                                    <th>
-                                        {{ __('Status') }}
                                     </th>
                                     <th>
                                         {{ __('Active') }}
@@ -53,20 +43,13 @@
                                     </th>
                                 </tr></thead>
                                 <tbody>
-                                @if($listParent)
-                                    @foreach($listParent as $key => $value)
+                                    @forelse($roles as $key => $value)
                                         <tr class="text-center">
                                             <td>
-                                                {{ $value->id }}
+                                                {{ $loop->iteration }}
                                             </td>
                                             <td>
                                                 {{ $value->name }}
-                                            </td>
-                                            <td>
-                                                {{ $value->parent }}
-                                            </td>
-                                            <td>
-                                                <span class="btn btn-info btn-sm">{{ $value->status }}</span>
                                             </td>
                                             <td>
                                                 <button class="btn btn-sm btn-{{ $value->active == \App\Common\Constant::NUMBER_ONE ? 'success' : 'danger' }} btn-round btn-fab">
@@ -87,29 +70,25 @@
                                                 </div>
                                             </td>
                                             <td class="td-actions text-right">
-                                                @can(\App\Common\Constant::GATE_UPDATE_CATEGORY, $value)
-                                                    <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.category.createAndEdit',$value->id) }}"
-                                                       rel="tooltip" class="btn btn-success" data-original-title=""
-                                                       title="{{__("Edit")}}">
-                                                        <i class="material-icons">edit</i>
-                                                        <div class="ripple-container"></div>
-                                                    </a>
-                                                @endcan
-                                                @can(\App\Common\Constant::GATE_DELETE_CATEGORY, $value)
-                                                    <button type="button" data-id="{{$value->id}}" rel="tooltip"
-                                                            class="btn btn-danger btn-round delete"
-                                                            title="{{__("Delete")}}" data-toggle="modal"
-                                                            data-target="#deleteModal">
-                                                        <i class="material-icons">close</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
-                                                @endcan
+                                                <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.role.createAndEdit',$value->id) }}"
+                                                   rel="tooltip" class="btn btn-success" data-original-title=""
+                                                   title="{{__("Edit")}}">
+                                                    <i class="material-icons">edit</i>
+                                                    <div class="ripple-container"></div>
+                                                </a>
+                                                <button type="button" data-id="{{$value->id}}" rel="tooltip"
+                                                        class="btn btn-danger btn-round delete" title="{{__("Delete")}}"
+                                                        data-toggle="modal" data-target="#deleteModal">
+                                                    <i class="material-icons">close</i>
+                                                    <div class="ripple-container"></div>
+                                                </button>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @else
-                                    <tr class="text-center"><td colspan="9">{{ __('message.NOT_DATA_SEARCH') }}</td></tr>
-                                @endif
+                                    @empty
+                                        <tr class="text-center">
+                                            <td colspan="9">{{ __('message.NOT_DATA_SEARCH') }}</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

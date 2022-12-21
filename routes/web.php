@@ -72,4 +72,36 @@ Route::group(['prefix' => Constant::FOLDER_URL_ADMIN_ROUTE], function () {
             ->name(Constant::FOLDER_URL_ADMIN.'.news.store');
         Route::post('/', Constant::FOLDER_URL_ADMIN . '\News\NewsController@delete');
     });
+
+    // Role Routes...
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/', Constant::FOLDER_URL_ADMIN . '\Role\RoleController@index')
+            ->name(Constant::FOLDER_URL_ADMIN.'.role.index');
+        Route::get('/create-edit/{id?}', Constant::FOLDER_URL_ADMIN . '\Role\RoleController@createAndEdit')
+            ->name(Constant::FOLDER_URL_ADMIN.'.role.createAndEdit');
+        Route::post('/store', Constant::FOLDER_URL_ADMIN . '\Role\RoleController@store')
+            ->name(Constant::FOLDER_URL_ADMIN.'.role.store');
+        Route::post('/', Constant::FOLDER_URL_ADMIN . '\Role\RoleController@delete');
+    });
+
+    // Permission Routes...
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('/', Constant::FOLDER_URL_ADMIN . '\Permission\PermissionController@index')
+            ->name(Constant::FOLDER_URL_ADMIN.'.permission.index');
+        Route::get('/create-edit/{id?}', Constant::FOLDER_URL_ADMIN . '\Permission\PermissionController@createAndEdit')
+            ->name(Constant::FOLDER_URL_ADMIN.'.permission.createAndEdit');
+        Route::post('/store', Constant::FOLDER_URL_ADMIN . '\Permission\PermissionController@store')
+            ->name(Constant::FOLDER_URL_ADMIN.'.permission.store');
+        Route::post('/', Constant::FOLDER_URL_ADMIN . '\Permission\PermissionController@delete');
+    });
+
+    // User Routes...
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/', Constant::FOLDER_URL_ADMIN . '\User\UserController@index')
+            ->name(Constant::FOLDER_URL_ADMIN.'.user.index');
+        Route::get('/edit/{id?}', Constant::FOLDER_URL_ADMIN . '\User\UserController@editUser')
+            ->name(Constant::FOLDER_URL_ADMIN.'.user.edit');
+        Route::post('/store', Constant::FOLDER_URL_ADMIN . '\User\UserController@store')
+            ->name(Constant::FOLDER_URL_ADMIN.'.user.store');
+    });
 });

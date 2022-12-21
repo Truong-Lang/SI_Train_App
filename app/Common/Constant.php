@@ -26,7 +26,7 @@ class Constant
      * Define number
      */
     const NUMBER_ZERO = 0;
-    const NUMBER_ONE = 1;
+    const NUMBER_ONE  = 1;
 
     /**
      * Define format date
@@ -43,4 +43,28 @@ class Constant
      * Default page rows
      */
     const ROWS_PER_PAGE = 5;
+
+    /**
+     * Define role
+     */
+    const ROLE_ADMIN = 'Admin';
+    const ROLE_USER  = 'User';
+
+    /**
+     * Define Gate name
+     */
+    const GATE_ROLE_IS_ADMIN   = 'isAdmin';
+    const GATE_ROLE_IS_USER    = 'isUser';
+    const GATE_UPDATE_NEWS     = 'edit-news';
+    const GATE_DELETE_NEWS     = 'delete-news';
+    const GATE_UPDATE_CATEGORY = 'edit-category';
+    const GATE_DELETE_CATEGORY = 'delete-category';
+
+    /**
+     * Define permission
+     */
+    const PERMISSION_UPDATE_NEWS     = 'Update News';
+    const PERMISSION_DELETE_NEWS     = 'Delete News';
+    const PERMISSION_UPDATE_CATEGORY = 'Update Category';
+    const PERMISSION_DELETE_CATEGORY = 'Delete Category';
 }

@@ -13,11 +13,13 @@
                             <h4 class="card-title ">{{ __('News Management') }}</h4>
                         </div>
                         <div class="card-body">
-                            <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit') }}"
-                               class="btn btn-success pull-right">
-                                <i class="material-icons">add</i> {{ __('button.CREATE') }}
-                                <div class="ripple-container"></div>
-                            </a>
+                            @cannot(\App\Common\Constant::GATE_ROLE_IS_ADMIN)
+                                <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit') }}"
+                                   class="btn btn-success pull-right">
+                                    <i class="material-icons">add</i> {{ __('button.CREATE') }}
+                                    <div class="ripple-container"></div>
+                                </a>
+                            @endcan
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead class=" text-primary">
@@ -81,19 +83,23 @@
                                                     </div>
                                                 </td>
                                                 <td class="td-actions text-right">
-                                                    <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit',$value->id) }}"
-                                                       rel="tooltip" class="btn btn-success" data-original-title=""
-                                                       title="{{__("Edit")}}">
-                                                        <i class="material-icons">edit</i>
-                                                        <div class="ripple-container"></div>
-                                                    </a>
-                                                    <button type="button" data-id="{{$value->id}}" rel="tooltip"
-                                                            class="btn btn-danger btn-round delete"
-                                                            title="{{__("Delete")}}" data-toggle="modal"
-                                                            data-target="#deleteModal">
-                                                        <i class="material-icons">close</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
+                                                    @can(\App\Common\Constant::GATE_UPDATE_NEWS, $value)
+                                                        <a href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.news.createAndEdit',$value->id) }}"
+                                                           rel="tooltip" class="btn btn-success" data-original-title=""
+                                                           title="{{__("Edit")}}">
+                                                            <i class="material-icons">edit</i>
+                                                            <div class="ripple-container"></div>
+                                                        </a>
+                                                    @endcan
+                                                    @can(\App\Common\Constant::GATE_DELETE_NEWS, $value)
+                                                        <button type="button" data-id="{{$value->id}}" rel="tooltip"
+                                                                class="btn btn-danger btn-round delete"
+                                                                title="{{__("Delete")}}" data-toggle="modal"
+                                                                data-target="#deleteModal">
+                                                            <i class="material-icons">close</i>
+                                                            <div class="ripple-container"></div>
+                                                        </button>
+                                                    @endcan
                                                 </td>
                                             </tr>
                                         @endforeach
