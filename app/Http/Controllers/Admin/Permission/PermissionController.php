@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Category;
+namespace App\Http\Controllers\Admin\Permission;
 
 use App\Common\Constant;
 use App\Http\Controllers\Admin\Controller;
-use App\Http\Requests\CategoryRequest;
-use App\Models\Admin\Category\Category;
-use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
+use App\Http\Requests\PermissionRequest;
+use App\Models\Admin\Permission\Permission;
+use App\Models\Admin\Role\Role;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -18,22 +17,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
-class CategoryController extends Controller
+class PermissionController extends Controller
 {
     /**
-     * @var Category
+     * @param Permission $permission
      */
-    protected Category $category;
-
-    /**
-     * CategoryController constructor.
-     *
-     *
-     */
-    public function __construct(Category $category)
+    public function __construct(protected Permission $permission)
     {
         $this->middleware('auth');
-        $this->category = $category;
+        $this->middleware('can:' . Constant::GATE_ROLE_IS_ADMIN);
     }
 
     /**
@@ -41,63 +33,59 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $listParent = $this->category->getAll(['c.parent' => Constant::NUMBER_ZERO], 'c.status ASC');
+        $permissions = $this->permission->getAll();
 
-        return view(Constant::FOLDER_URL_ADMIN . '.category.index', compact('listParent'));
+        return view(Constant::FOLDER_URL_ADMIN . '.permission.index', compact('permissions'));
     }
 
     /**
      * @param Request $request
      *
      * @return Application|Factory|View|RedirectResponse
-     * @throws AuthorizationException
      */
     public function createAndEdit(Request $request)
     {
         $id = (int)$request->id;
-        $listParent = $this->category->getAll();
+        $roles = Role::whereNull('deleted_at')->get();
         if ($id) {
-            $title = __('Edit Category');
+            $title = __('Edit Permission');
         } else {
-            $title = __('Add Category');
+            $title = __('Add Permission');
         }
         if (empty($id)) {
-            $this->authorize(Constant::GATE_ROLE_IS_USER);
-
             return view(
-                Constant::FOLDER_URL_ADMIN . '.category.create_edit',
-                compact('listParent', 'title')
+                Constant::FOLDER_URL_ADMIN . '.permission.create_edit',
+                compact('roles', 'title')
             );
         }
 
-        $getCategory = $this->category->getById($id);
-        if (empty($getCategory)) {
-            return redirect()->route(Constant::FOLDER_URL_ADMIN . '.category.index');
+        $getPermission = $this->permission->getById($id);
+        if (empty($getPermission)) {
+            return redirect()->route(Constant::FOLDER_URL_ADMIN . '.permission.index');
         }
-        $this->authorize(Constant::GATE_UPDATE_CATEGORY, $getCategory);
 
         return view(
-            Constant::FOLDER_URL_ADMIN . '.category.create_edit',
-            compact('listParent', 'getCategory', 'title')
+            Constant::FOLDER_URL_ADMIN . '.permission.create_edit',
+            compact('roles', 'getPermission', 'title')
         );
     }
 
     /**
-     * @param CategoryRequest $request
+     * @param PermissionRequest $request
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public function store(CategoryRequest $request)
+    public function store(PermissionRequest $request)
     {
         $params = $request->all();
         $params['userId'] = Auth::id();
         DB::beginTransaction();
         try {
-            $this->category->insertOrUpdate($params);
+            $this->permission->insertOrUpdate($params);
             $request->session()->flash('alert-success', __('message.MESSAGE_SUCCESS_UPDATE'));
             DB::commit();
 
-            return redirect(route(Constant::FOLDER_URL_ADMIN . '.category.index'));
+            return redirect(route(Constant::FOLDER_URL_ADMIN . '.permission.index'));
         } catch (Exception $e) {
             DB::rollBack();
             $request->session()->flash('alert-danger', __('message.TRANSACTION_FAIL'));
@@ -117,11 +105,11 @@ class CategoryController extends Controller
         $params['userId'] = Auth::id();
         DB::beginTransaction();
         try {
-            $this->category->deleteCategory($params);
+            $this->permission->deletePermission($params);
             $request->session()->flash('alert-success', __('message.MESSAGE_SUCCESS_UPDATE'));
             DB::commit();
 
-            return redirect(route(Constant::FOLDER_URL_ADMIN . '.category.index'));
+            return redirect(route(Constant::FOLDER_URL_ADMIN . '.permission.index'));
         } catch (Exception $e) {
             DB::rollBack();
             $request->session()->flash('alert-danger', __('message.TRANSACTION_FAIL'));

@@ -30,12 +30,14 @@
                 <span class="sidebar-normal">{{ __('User profile') }} </span>
               </a>
             </li>
-            <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-              <a class="nav-link" href="">
-                <span class="sidebar-mini"> UM </span>
-                <span class="sidebar-normal"> {{ __('User Management') }} </span>
-              </a>
-            </li>
+            @can(\App\Common\Constant::GATE_ROLE_IS_ADMIN)
+              <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
+                <a class="nav-link" href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.user.index') }}">
+                  <span class="sidebar-mini"> UM </span>
+                  <span class="sidebar-normal"> {{ __('User Management') }} </span>
+                </a>
+              </li>
+            @endcan
           </ul>
         </div>
       </li>
@@ -53,6 +55,22 @@
             <p>{{ __('News Management') }}</p>
         </a>
       </li>
+
+      @can(\App\Common\Constant::GATE_ROLE_IS_ADMIN)
+        <li class="nav-item{{ $activePage == 'role' ? ' active' : '' }}">
+          <a class="nav-link" href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.role.index') }}">
+            <i class="material-icons">admin_panel_settings</i>
+            <p>{{ __('Role Management') }}</p>
+          </a>
+        </li>
+
+        <li class="nav-item{{ $activePage == 'permission' ? ' active' : '' }}">
+          <a class="nav-link" href="{{ route(\App\Common\Constant::FOLDER_URL_ADMIN . '.permission.index') }}">
+            <i class="material-icons">verified_user</i>
+            <p>{{ __('Permission Management') }}</p>
+          </a>
+        </li>
+      @endcan
 
       <li class="nav-item{{ $activePage == 'icons' ? ' active' : '' }}">
         <a class="nav-link" href="">

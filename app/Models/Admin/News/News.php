@@ -3,6 +3,7 @@
 namespace App\Models\Admin\News;
 
 use App\Common\Constant;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -42,7 +43,7 @@ class News extends Model
      * @param $orderBy
      * 
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function getListNews($limit, $where = null, $orderBy = null)
     {

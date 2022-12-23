@@ -8,6 +8,7 @@ use App\Http\Requests\NewsRequest;
 use App\Http\Services\UploadImage\UploadImageService;
 use App\Models\Admin\Category\Category;
 use App\Models\Admin\News\News;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -57,6 +58,7 @@ class NewsController extends Controller
      * @param Request $request
      *
      * @return Application|Factory|View|RedirectResponse
+     * @throws AuthorizationException
      */
     public function createAndEdit(Request $request)
     {
@@ -68,6 +70,8 @@ class NewsController extends Controller
             $title = __('Add News');
         }
         if (empty($id)) {
+            $this->authorize(Constant::GATE_ROLE_IS_USER);
+
             return view(
                 Constant::FOLDER_URL_ADMIN . '.news.create_edit',
                 compact('categories', 'title')
@@ -78,6 +82,7 @@ class NewsController extends Controller
         if (empty($getNews)) {
             return redirect()->route(Constant::FOLDER_URL_ADMIN . '.news.index');
         }
+        $this->authorize(Constant::GATE_UPDATE_NEWS, $getNews);
 
         return view(
             Constant::FOLDER_URL_ADMIN . '.news.create_edit',
