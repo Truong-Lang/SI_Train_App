@@ -84,7 +84,7 @@ class Role extends Model
         $dateTime = now();
         $arrData = [
             'name'       => $params['name'],
-            'active'     => !empty($params['active']) ? $params['active'] : Constant::NUMBER_ZERO,
+            'active'     => $params['active'] ?? Constant::NUMBER_ZERO,
             'del_flg'    => Constant::NUMBER_ZERO,
             'updated_at' => $dateTime,
             'updated_by' => $params['userId']
@@ -116,24 +116,5 @@ class Role extends Model
                 'deleted_at' => now(),
                 'deleted_by' => $params['userId'],
             ]);
-    }
-
-    /**
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function getByUserId($id)
-    {
-        $sql = DB::table($this->table . ' as r')
-            ->join('users as u', function ($join) use ($id) {
-                $join->on('u.role_id', '=', 'r.id')
-                    ->whereNull('u.deleted_at')
-                    ->where('u.id', $id);
-            });
-
-        return $sql->select('r.name')
-            ->whereNull('r.deleted_at')
-            ->get()->first();
     }
 }

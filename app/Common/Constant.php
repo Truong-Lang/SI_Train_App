@@ -47,8 +47,7 @@ class Constant
     /**
      * Define role
      */
-    const ROLE_ADMIN = 'Admin';
-    const ROLE_USER  = 'User';
+    const ROLE = ['Admin' => 1, 'User' => 2];
 
     /**
      * Define Gate name

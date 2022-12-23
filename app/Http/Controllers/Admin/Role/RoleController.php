@@ -19,18 +19,11 @@ use Illuminate\Support\Facades\Redirect;
 class RoleController extends Controller
 {
     /**
-     * @var Role
-     */
-    protected Role $role;
-
-    /**
      * @param Role $role
      */
-    public function __construct(Role $role)
-    {
+    public function __construct(protected Role $role) {
         $this->middleware('auth');
         $this->middleware('can:' . Constant::GATE_ROLE_IS_ADMIN);
-        $this->role = $role;
     }
 
     /**

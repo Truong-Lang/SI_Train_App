@@ -90,7 +90,7 @@ class Permission extends Model
         $arrData = [
             'permission' => $params['permission'],
             'role_id'    => $params['role_id'],
-            'active'     => !empty($params['active']) ? $params['active'] : Constant::NUMBER_ZERO,
+            'active'     => $params['active'] ?? Constant::NUMBER_ZERO,
             'del_flg'    => Constant::NUMBER_ZERO,
             'updated_at' => $dateTime,
             'updated_by' => $params['userId']

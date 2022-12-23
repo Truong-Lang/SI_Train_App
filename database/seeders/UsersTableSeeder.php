@@ -1,6 +1,8 @@
 <?php
+
 namespace Database\Seeders;
 
+use App\Common\Constant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +20,7 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'username'          => 'admin',
             'email'             => 'demo@vn.ids.jp',
+            'role_id'           => Constant::ROLE['Admin'],
             'email_verified_at' => $datetime,
             'first_name'        => 'ids',
             'last_name'         => 'vn',

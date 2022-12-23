@@ -20,20 +20,13 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-
-    /**
-     * @var User
-     */
-    protected User $user;
-
     /**
      * @param User $user
      */
-    public function __construct(User $user)
+    public function __construct(protected User $user)
     {
         $this->middleware('auth');
         $this->middleware('can:' . Constant::GATE_ROLE_IS_ADMIN);
-        $this->user = $user;
     }
 
     /**

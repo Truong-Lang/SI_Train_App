@@ -35,13 +35,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define(Constant::GATE_ROLE_IS_ADMIN, function (User $user) {
-            $role = new Role();
-            return $role->getByUserId($user->id)->name === Constant::ROLE_ADMIN;
+            return $user->role_id === Constant::ROLE['Admin'];
         });
 
         Gate::define(Constant::GATE_ROLE_IS_USER, function (User $user) {
-            $role = new Role();
-            return $role->getByUserId($user->id)->name === Constant::ROLE_USER;
+            return $user->role_id === Constant::ROLE['User'];
         });
 
         Gate::define(Constant::GATE_UPDATE_NEWS, [NewsPolicy::class, 'edit']);

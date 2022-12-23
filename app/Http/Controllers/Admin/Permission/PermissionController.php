@@ -20,18 +20,12 @@ use Illuminate\Support\Facades\Redirect;
 class PermissionController extends Controller
 {
     /**
-     * @var Permission
-     */
-    protected Permission $permission;
-
-    /**
      * @param Permission $permission
      */
-    public function __construct(Permission $permission)
+    public function __construct(protected Permission $permission)
     {
         $this->middleware('auth');
         $this->middleware('can:' . Constant::GATE_ROLE_IS_ADMIN);
-        $this->permission = $permission;
     }
 
     /**

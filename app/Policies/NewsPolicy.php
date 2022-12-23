@@ -4,13 +4,20 @@ namespace App\Policies;
 
 use App\Common\Constant;
 use App\Models\Admin\Permission\Permission;
-use App\Models\Admin\Role\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class NewsPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * @param Permission $permission
+     */
+    public function __construct(
+        protected Permission $permission
+    ) {
+    }
 
     /**
      * @param User $user
@@ -20,9 +27,7 @@ class NewsPolicy
      */
     public function before(User $user, $ability)
     {
-        $role = new Role();
-        $role_name = $role->getByUserId($user->id)->name;
-        if ($role_name === Constant::ROLE_ADMIN) {
+        if ($user->role_id === Constant::ROLE['Admin']) {
             return true;
         }
     }
@@ -34,14 +39,11 @@ class NewsPolicy
      * @return bool
      */
     public function edit(User $user, $news)
-    {
-        $permission = new Permission();
-        $permissionList = $permission->getAllByRoleId($user->role_id);
-        if ($permissionList->contains('permission', Constant::PERMISSION_UPDATE_NEWS) && $user->id === $news->created_by) {
-            return true;
-        } else {
-            return false;
-        }
+    : bool {
+        $permissionList = $this->permission->getAllByRoleId($user->role_id);
+
+        return $permissionList->contains('permission',
+                Constant::PERMISSION_UPDATE_NEWS) && $user->id === $news->created_by;
     }
 
     /**
@@ -51,13 +53,10 @@ class NewsPolicy
      * @return bool
      */
     public function delete(User $user, $news)
-    {
-        $permission = new Permission();
-        $permissionList = $permission->getAllByRoleId($user->role_id);
-        if ($permissionList->contains('permission', Constant::PERMISSION_DELETE_NEWS) && $user->id === $news->created_by) {
-            return true;
-        } else {
-            return false;
-        }
+    : bool {
+        $permissionList = $this->permission->getAllByRoleId($user->role_id);
+
+        return $permissionList->contains('permission',
+                Constant::PERMISSION_DELETE_NEWS) && $user->id === $news->created_by;
     }
 }
